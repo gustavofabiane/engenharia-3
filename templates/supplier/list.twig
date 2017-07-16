@@ -1,0 +1,39 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header">Fornecedores</h2>
+
+    <a class="btn btn-primary" href="{{ path_for('new-supplier') }}">Novo</a>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Cadastro</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for supplier in suppliers %}
+                <tr>
+                    <td>{{ supplier.id }}</td>
+                    <td>{{ supplier.razaoSocial }}</td>
+                    <td>{{ supplier.cgcCpf }}</td>
+                    <td>{{ supplier.email }}</td>
+                    <td>{{ supplier.telefone }}</td>
+                    <td>
+                        <a class="btn btn-xs btn-info" href="{{ path_for('update-supplier', {id: supplier.id}) }}">Alterar</a>
+                        <a class="btn btn-xs btn-danger" href="{{ path_for('disable-supplier', {id: supplier.id}) }}">Desabilitar</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td>Nenhum fornecedor cadastrado</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

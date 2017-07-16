@@ -1,0 +1,49 @@
+{% extends "base/base.twig" %}
+
+{% block content %}
+    {% for erro in exception.getErrors() %}
+        <p>{{erro}}</p>
+    {% endfor %}
+    <h2 class="page-header">Seu cadastro está completo</h2>
+
+    <p>Por favor, verifique os dados e confirme para finalizar o cadastro</p>
+
+    <div class="col-xs-6">
+        <h4>
+            <a href="{{ path_for('register-account') }}" title="Alterar dados da conta"><i class="glyphicon glyphicon-edit"></i></a>
+            Sua Conta
+        </h4>
+        <ul class="list-unstyled">
+            <li><b>Nome:</b> {{ user.nome }} {{ user.sobrenome }}</li>
+            <li><b>E-mail:</b> {{ user.email }}</li>
+            <li><b>Telefone:</b> {{ user.telefone }}</li>
+            <li><b>CPF:</b> {{ user.cpf }}</li>
+            <li><b>Endereço:</b> {{ user.endereco }} - {{ user.estado.descricao }}</li>
+        </ul>
+    </div>
+        
+    <div class="col-xs-6">
+        <h4>
+            <a href="{{ path_for('register-company') }}" title="Alterar dados da empresa"><i class="glyphicon glyphicon-edit"></i></a>
+            Sua Empresa
+        </h4>
+        <ul class="list-unstyled">
+            <li><b>Razão Social:</b> {{ company.razaoSocial }}</li>
+            <li><b>Nome fantasia:</b> {{ company.fantasia }}</li>
+            <li><b>CNPJ:</b> {{ company.cnpj }}</li>
+            <li><b>Saldo Inicial:</b> R$ {{ company.saldoInicial|number_format(2, ',', '.') }}</li>
+            <li><b>E-mail:</b> {{ company.email }}</li>
+            <li><b>Telefone:</b> {{ company.telefone }}</li>
+        </ul>
+    </div>
+        
+    <form name="verification" method="POST" action="{{path_for('register-verify') }}">
+        <input type="hidden" name="verify" value="ok" readonly>
+        <div class="text-center">
+            <a class="btn btn-info" href="{{ path_for('register-company') }}"><i class="glyphicon glyphicon-arrow-left"></i> Voltar</a>
+            <a class="btn btn-default" href="{{ path_for('register-cancel') }}">Cancelar</a>
+            <button class="btn btn-primary">Salvar <i class="glyphicon glyphicon-check"></i></button>
+        </div>
+    </form>
+
+{% endblock %}

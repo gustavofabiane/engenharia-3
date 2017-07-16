@@ -1,0 +1,51 @@
+<div class="payment-data">
+    <h4>Finalizar Venda</h4>
+
+    <table id="sale-details" class="table table-condensed">
+        <tr>
+            <td>Valor da Venda:</td>
+            <td>R$ {{ saleData.total|number_format(2,',','.') }}</td>
+        <input required type="hidden" name="total" value="{{saleData.total}}">
+        </tr>
+        {% if saleData.discount %}
+            <tr>
+                <td>Desconto:</td>
+                <td>R$ {{ saleData.discount|number_format(2,',','.') }}</td>
+            <input required type="hidden" name="desconto" value="{{saleData.discount}}">
+            </tr>
+            <tr>
+                <td>Total:</td>
+                <td>R$ {{ saleData.discountTotal|number_format(2,',','.') }}</td>
+            <input required type="hidden" name="totalLiquido" value="{{saleData.discountTotal}}">
+            </tr>
+        {% else %}
+            <input required type="hidden" name="totalLiquido" value="{{saleData.total}}">
+        {% endif %}
+    </table>
+    <div class="form-horizontal">
+        {% if method.aceitaTroco %}
+            <div class="form-group">
+                <label class="control-label col-xs-3">Recebido:</label>
+                <div class="col-xs-9">
+                    <input class="form-control" required onblur="calcTroco(this.value);" type="text" name="recebido" value="" id="recebido">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3">Troco:</label>
+                <div class="col-xs-9">
+                    <p class="form-control-static" id="showTroco">R$ 0,00</p>
+                </div>
+                <input type="hidden" name="troco" value="" id="troco">
+            </div>
+        {% endif %}
+        <div class="form-group">
+            <label class="control-label col-xs-3">Observações:</label>
+            <div class="col-xs-9">
+                <textarea class="form-control" name="observacoes" id="observacoes"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary btn-block">Finalizar Venda</button>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header">Empresas</h2>
+
+    <section id="companies">
+        {% for company in companies %}
+            <article class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4>{{ company.razaoSocial }} - <em>{{ company.fantasia }}</em></h4>
+                </div>
+                <div class="panel-body">
+                    {% if not company.fechada %}
+                        <div class="pull-right text-right">
+                        <a class="btn btn-sm btn-default" href="{{ path_for('view-company', {id: company.id}) }}"> Detalhes </a>
+                        <a class="btn btn-sm btn-info" href="{{ path_for('select-company-by-id', {id: company.id}) }}"> Selecionar </a>
+                        </div>
+                    {% endif %}
+                    <p>
+                        E-mail da Empresa: {{ company.email }}
+                    </p>
+                    <p>
+                        Telefone da Empresa: {{ company.telefone }}
+                    </p>
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+
+{% endblock %}

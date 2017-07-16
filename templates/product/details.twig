@@ -1,0 +1,59 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header">Produto nº {{ product.id }} - {{ product.nome }}</h2>
+
+    <div>
+        <a class="btn btn-info pull-right" href="{{ path_for('update-product', {id: product.id}) }}">Alterar</a>
+        <dl class="dl-horizontal">
+            <dt>Unidade:</dt>
+            {% set units = constant('\\Model\\Produto::UNIDADE_MEDIDA') %}
+            <dd>{{ units[product.unidadeMedida] }}</dd>
+            <dt>Valor:</dt>
+            <dd>R$ {{ product.valor|number_format(2,',','.') }}</dd>
+            <dt>Categoria:</dt>
+            <dd>{{ relationship(product, 'categoria').nome }}</dd>
+            <dt>Fornecedores:</dt>
+            <dd>
+                <ul class="list-unstyled">
+                    {% for supplier in sharedList(product, 'fornecedor') %}
+                        <li>{{ supplier.cgcCpf }} - {{ supplier.razaoSocial }} ( {{ supplier.countShared('produto') }} produto(s) )</li>
+                        {% endfor %}
+                </ul>
+            </dd>
+        </dl>
+    </div>
+    <hr>
+    <table class="table table-condensed table-striped">
+        <caption>Vendas</caption>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Quantidade</th>
+                <th>Preço de Venda</th>
+                <th>Valor total</th>
+                <th>Data</th>
+                <th>Total de Produtos</th>
+                <th>Total da Venda</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in sales %}
+                <tr>
+                    <td>{{ relationship(sale, 'venda').id }}</td>
+                    <td>{{ sale.quantidade }}</td>
+                    <td>{{ sale.preco|number_format(2,',','.') }}</td>
+                    <td>{{ (sale.preco * sale.quantidade)|number_format(2,',','.') }}</td>
+                    <td>{{ sale.venda.criado_em|date('d/m/Y') }}</td>
+                    <td>{{ sale.venda.countOwn('venda_produto') }}</td>
+                    <td>{{ sale.venda.totalLiquido|number_format(2,',','.') }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">Este produto ainda não foi vendido</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

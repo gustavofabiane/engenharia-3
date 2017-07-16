@@ -1,0 +1,248 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header">Venda</h4>
+
+    <div>
+        <div id="add-product" class="form-inline form-group">
+            <select class="form-control" id="produto">
+                <option value="">Selecione...</option>
+                {% for product in products %}
+                    <option value="{{ product.id }}-{{ product.nome }}-{{ product.valor }}">
+                        {{ product.id }} - {{ product.nome }} - R$ {{ product.valor|number_format(2, ',', '.') }}
+                    </option>
+                {% endfor %}
+            </select>
+            <input class="form-control" type="number" id="quantidade" placeholder="Quantidade">
+            <button class="btn btn-info" id="addProduto" type="button">Adicionar</button>
+        </div>
+        <form name="newSale" action="{{ path_for('new-sale') }}" method="POST">
+            <input type="hidden" name="_METHOD" value="PUT">
+            <div id="venda" class="row">
+
+                <div id="produtos" class="col-xs-8"></div>
+
+                <div class="total col-xs-4">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-xs-6" for="total">Total: </label>
+                            <div class="col-xs-6">
+                                <p id="total" class="form-control-static">R$ 0,00</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button type="button" id="ir-pagamento" class="btn btn-primary">Avançar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="pagamento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Pagamento</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="control-label">Método de Pagamento:</label>
+                                <select class="form-control" name="metodoPagamento" id="metodo-pagamento">
+                                    <option value="">Selecione</option>
+                                    {% for method in methods %}
+                                        <option value="{{method.id}}">{{ method.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Desconto:</label>
+                                <input class="form-control" onblur="loadPaymentForm($('#metodo-pagamento').val());" type="text" name="desconto" id="desconto">
+                            </div>
+                            <div id="form-pagamento"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <div class="hidden">
+            <div class="produto-box panel panel-default" id="base">
+                <span class="remover-item glyphicon glyphicon-remove pull-right"></span>
+                <h5 class="nome-produto"></h5>
+                <p class="valor-produto"></p>
+                <p class="quantidade-produto"></p>
+                <input type="hidden" name="produto[]" class="id-venda-produto">
+                <input type="hidden" name="produto[]" class="qtd-venda-produto">
+                <input type="hidden" name="produto[]" class="valor-venda-produto">
+            </div>
+        </div>
+    </div>
+    <script>
+
+        var totalSale = 0.0;
+
+        var indexProdutos = 0;
+
+        function loadProduct() {
+
+            var tmpProduct = $('#produto').val();
+            tmpProduct = tmpProduct.split('-');
+
+            var tmpQuantity = parseFloat($('#quantidade').val());
+
+            var produto = {
+                "id": tmpProduct[0],
+                "nome": tmpProduct[1],
+                "preco": tmpProduct[2],
+                "quantidade": tmpQuantity
+            };
+
+            return produto;
+        }
+
+        function checkProductStock() {
+            produto = loadProduct();
+
+            $.ajax({
+                url: '{{ path_for('check-stock') }}',
+                type: 'post',
+                dataType: 'json',
+                data: produto,
+                success: function (result) {
+                    if (result.hasStock === true) {
+
+                        result.product.valor = parseFloat(result.product.valor);
+
+                        addProduct(result.product);
+                    } else {
+                        if (result.stock === 0) {
+                            alert('Este produto está fora de estoque.');
+                            $('#add-product').children('input, select').val('');
+                            $('#produto').focus();
+                        }
+                        alert('Não há itens suficientes em estoque para esse produto (Estoque:' + result.stock + ').');
+                        $('#quantidade').val(result.stock);
+                    }
+                }
+            });
+        }
+
+        function addProduct(product) {
+
+            var item = $('#base').clone();
+
+            item.children('.nome-produto').html(product.nome);
+            item.children('.valor-produto').html('Valor: ' + new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(product.valor));
+            item.children('.quantidade-produto').html(product.quantidade + ' ' + product.unidadeMedida);
+
+            item.children('.id-venda-produto')
+                    .attr('name', 'produto[' + indexProdutos + '][id]')
+                    .val(product.id);
+            item.children('.qtd-venda-produto')
+                    .attr('name', 'produto[' + indexProdutos + '][quantidade]')
+                    .val(product.quantidade);
+            item.children('.valor-venda-produto')
+                    .attr('name', 'produto[' + indexProdutos + '][valor]')
+                    .val(product.valor);
+
+            item.children('.remover-item').click(function () {
+                value = $(this).siblings('input.valor-venda-produto').val();
+                quantity = $(this).siblings('input.qtd-venda-produto').val();
+                decrementSale(value, quantity);
+                $(this).parent().remove();
+            });
+
+            incrementSale(product.valor, product.quantidade);
+
+            $('#produtos').append(item);
+
+            $('#add-product').children('input, select').val('');
+            $('#produto').focus();
+
+            indexProdutos++;
+        }
+
+        function incrementSale(value, quantity) {
+            totalSale += (value * quantity);
+            $('#total').html(new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(totalSale));
+        }
+
+        function decrementSale(value, quantity) {
+            totalSale -= (value * quantity);
+            $('#total').html(new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(totalSale));
+        }
+
+        function loadPaymentForm(id) {
+            if (isNaN(id)) {
+                alert("Favor selecionar um método de pagamento!");
+                $('#metodo-pagamento').focus();
+                return false;
+            }
+
+            var paymentData = {"total": totalSale};
+            if ($('#desconto').val() !== '') {
+                paymentData.desconto = parseFloat($('#desconto').val());
+            }
+            $.ajax({
+                url: 'http://engenharia.dev/metodos-de-pagamento/formulario/' + id + '/',
+                data: paymentData,
+                type: 'patch',
+                success: function (result) {
+                    $('#form-pagamento').html(result);
+                }
+            });
+        }
+
+        function calcTroco(value) {
+            console.log(value);
+            value = parseFloat(value);
+            console.log(value);
+            var total = parseFloat($('input[name=totalLiquido]').val());
+            console.log(total);
+            if (value < total) {
+                alert('Oops, o valor recebido é menor que o total da venda!');
+                return false;
+            }
+
+            troco = value - total;
+            console.log(troco);
+            $('#showTroco').html(new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(troco));
+            $('input[name=troco]').val(troco);
+        }
+
+        $(document).ready(function () {
+            $('#addProduto').click(function () {
+
+                if ($('#produto').val() === '') {
+                    alert('Favor selecionar um produto!');
+                    return false;
+                }
+
+                if (isNaN($('#quantidade').val())) {
+                    alert('Favor informar a quantidade do produto!');
+                    return false;
+                }
+
+                checkProductStock();
+            });
+
+            $('#ir-pagamento').click(function () {
+                if (totalSale <= 0) {
+                    alert("Favor adicionar pelo menos um item à venda!");
+                    return false;
+                }
+                $('#pagamento').modal('show');
+            });
+
+            $('#metodo-pagamento').change(function () {
+
+                if ($(this).val() === '') {
+                    alert('Favor selecionar um método de pagamento!');
+                    return false;
+                }
+
+                loadPaymentForm($(this).val());
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,105 @@
+<div class="col-sm-6">
+    <fieldset>
+        <legend>Conta</legend>
+        <div class="form-group {{ (errors.login) ? 'has-error' : '' }}">
+            <label class="control-label">Login:</label>
+            <input class="form-control" type="text" name="login" id="login" value="{{employee.login}}">
+            <p class="help-block">{{ (errors.login) ? errors.login : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.email) ? 'has-error' : '' }}">
+            <label class="control-label">Email:</label>
+            <input class="form-control" type="email" name="email" id="email" value="{{employee.email}}">
+            <p class="help-block">{{ (errors.email) ? errors.email : '' }}</p>
+        </div>
+        {% if not update %}
+            <div class="form-group {{ (errors.senha) ? 'has-error' : '' }}">
+                <label class="control-label">Senha:</label>
+                <input class="form-control" type="password" name="senha" id="senha" value="">
+            </div>
+            <div class="form-group {{ (errors.senha) ? 'has-error' : '' }}">
+                <label class="control-label">Confirmar senha:</label>
+                <input class="form-control" type="password" name="confirma" id="confirma">
+            </div>   
+            <div class="form-group {{ (errors.senha) ? 'has-error' : '' }}">
+                <p class="help-block">{{ errors.senha }}</p>
+            </div>
+        {% endif %}
+        <div class="form-group {{ (errors.cargo) ? 'has-error' : '' }}">
+            <label class="control-label">Cargo:</label>
+            <select class="form-control" name="cargo" id="cargo">
+                <option value="">Selecione</option>
+                {% for job in jobs %}
+                    {% set selected = (job.id == employee.cargo.id) ? 'selected' : '' %}
+                    <option value="{{job.id}}" {{selected}}>{{job.nome}}</option>
+                {% endfor %}
+            </select>
+            <p class="help-block">{{ (errors.cargo) ? errors.cargo : '' }}</p>
+        </div> 
+    </fieldset>
+</div>
+<div class="col-sm-6">
+    <fieldset>
+        <legend>Dados pessoais</legend>
+        <div class="form-group  {{ (errors.nome) ? 'has-error' : '' }}">
+            <label class="control-label">Nome:</label>
+            <input class="form-control" type="text" name="nome" id="nome" value="{{employee.nome}}">
+            <p class="help-block">{{ (errors.nome) ? errors.nome : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.sobrenome) ? 'has-error' : '' }}">
+            <label class="control-label">Sobrenome:</label>
+            <input class="form-control" type="text" name="sobrenome" id="sobrenome" value="{{employee.sobrenome}}">
+            <p class="help-block">{{ (errors.sobrenome) ? errors.sobrenome : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.genero) ? 'has-error' : '' }}">
+            <label class="control-label">Gênero:</label>
+            <label class="radio-inline">
+                <input type="radio" name="genero" id="masc" value="M" {{ (employee.genero.name == 'M' or employee.genero.name != 'F') ? 'checked' : '' }}>Masculino
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="genero" id="femn" value="F" {{ (employee.genero.name == 'F') ? 'checked' : '' }}>Feminino
+            </label>
+            <p class="help-block">{{ (errors.genero) ? errors.genero : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.cpf) ? 'has-error' : '' }}">
+            <label class="control-label">CPF:</label>
+            <input class="form-control" type="text" name="cpf" id="cpf" value="{{employee.cpf}}">
+            <p class="help-block">{{ (errors.cpf) ? errors.cpf : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.telefone) ? 'has-error' : '' }}">
+            <label class="control-label">Telefone:</label>
+            <input class="form-control" type="text" name="telefone" id="telefone" value="{{employee.telefone}}">
+            <p class="help-block">{{ (errors.telefone) ? errors.telefone : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.dtNascimento) ? 'has-error' : '' }}">
+            <label class="control-label">Data de nascimento:</label>
+            <input class="form-control" type="text" name="dtNascimento" id="dtNascimento" value="{{employee.dtNascimento|date('d/m/Y')}}">
+            <p class="help-block">{{ (errors.dtNascimento) ? errors.dtNascimento : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.endereco) ? 'has-error' : '' }}">
+            <label class="control-label">Endereço:</label>
+            <input class="form-control" type="text" name="endereco" id="endereco" value="{{employee.endereco}}">
+            <p class="help-block">{{ (errors.endereco) ? errors.endereco : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.bairro) ? 'has-error' : '' }}">
+            <label class="control-label">Bairro:</label>
+            <input class="form-control" type="text" name="bairro" id="bairro" value="{{employee.bairro}}">
+            <p class="help-block">{{ (errors.bairro) ? errors.bairro : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.cidade) ? 'has-error' : '' }}">
+            <label class="control-label">Cidade:</label>
+            <input class="form-control" type="text" name="cidade" id="cidade" value="{{employee.cidade}}">
+            <p class="help-block">{{ (errors.cidade) ? errors.cidade : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.estado) ? 'has-error' : '' }}">
+            <label class="control-label">UF:</label>
+            <select class="form-control" name="estado" id="estado">
+                <option value="">...</option>
+                {% for state in states %}
+                    {% set selected = (state.id == employee.estado.id) ? 'selected' : '' %}
+                    <option value="{{state.id}}" {{selected}}>{{state.descricao}}</option>
+                {% endfor %}
+            </select>
+            <p class="help-block">{{ (errors.estado) ? errors.estado : '' }}</p>
+        </div>
+    </fieldset>
+</div>

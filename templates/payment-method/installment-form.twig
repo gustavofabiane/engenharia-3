@@ -1,0 +1,47 @@
+<div class="payment-data">
+
+    <h4>Finalizar Venda</h4>
+
+    <table id="sale-details" class="table table-condensed table-striped">
+        <tr>
+            <td>Valor da Venda:</td>
+            <td>R$ {{ saleData.total|number_format(2,',','.') }}</td>
+        <input required type="hidden" name="total" value="{{saleData.total}}">
+        </tr>
+        {% if saleData.discount %}
+            <tr>
+                <td>Desconto:</td>
+                <td>R$ {{ saleData.discount|number_format(2,',','.') }}</td>
+            <input required type="hidden" name="desconto" value="{{saleData.discount}}">
+            </tr>
+            <tr>
+                <td>Total:</td>
+                <td>R$ {{ saleData.discountTotal|number_format(2,',','.') }}</td>
+            <input required type="hidden" name="totalLiquido" value="{{saleData.discountTotal}}">
+            </tr>
+        {% else %}
+            <input required type="hidden" name="totalLiquido" value="{{saleData.total}}">
+        {% endif %}
+    </table>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-xs-3">Parcelas:</label>
+            <div class="col-xs-9">
+                <select class="form-control" name="parcelamento" required>
+                    {% for installment, value in saleData.installments %}
+                        <option value="{{ installment }}">{{installment}}x de R$ {{ value|number_format(2, ',', '.') }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-3">Obserevações:</label>
+            <div class="col-xs-9">
+                <textarea class="form-control" name="observacoes" id="observacoes"></textarea>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button class="btn btn-block btn-primary">Finalizar Venda</button>
+    </div>
+</div>

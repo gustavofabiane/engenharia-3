@@ -1,0 +1,12 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+    
+    <h2 class="page-header">Novo Fornecedor</h2>
+    
+    <form name="newSupplier" method="POST" action="{{ path_for('new-supplier') }}">
+        <input type="hidden" readonly name="validacao" value="newSupplier">
+        {% include 'supplier/supplier-form.twig' %}
+    </form>
+
+{% endblock %}

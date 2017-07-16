@@ -1,0 +1,50 @@
+.sidebar {
+    background-color: whitesmoke;
+    top:0;
+}
+
+main {
+    padding-bottom: 70px;
+}
+
+main > .container-fluid > h4 {
+    padding: 20px 10px 15px;
+    border-bottom: 1px solid gray;
+}
+
+.login-box {
+    margin-top: 100px;
+    padding: 30px 20px;
+    border-radius: 3px;
+    background-color: whitesmoke;
+}
+
+.panel-inline {
+    display: inline-block;
+    float: left;
+    width: 48%;
+    margin: 5px;
+}
+
+.produto-box {
+    padding: 10px;
+    margin: 5px;
+    display: inline-block;
+    width: 200px;
+}
+
+div#produtos {
+   min-height: 300px;
+   background-color: whitesmoke;
+}
+
+#form-check-sale form {
+    display: inline;
+}
+
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }

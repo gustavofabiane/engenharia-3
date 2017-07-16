@@ -1,0 +1,71 @@
+<div  class="col-sm-6">
+    <fieldset>
+        <legend>Dados da Empresa</legend>
+        <div class="form-group {{ (errors.cnpj) ? 'has-error' : '' }}">
+            <label class="control-label">CNPJ:</label>
+            <input required class="form-control" type="text" name="cnpj" id="cnpj" value="{{company.cnpj}}">
+            <p class="help-block">{{ (errors.cnpj) ? errors.cnpj : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.razaoSocial) ? 'has-error' : '' }}">
+            <label class="control-label">Razão Social:</label>
+            <input required class="form-control" type="text" name="razaoSocial" id="razaoSocial" value="{{company.razaoSocial}}">
+            <p class="help-block">{{ (errors.razaoSocial) ? errors.razaoSocial : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.fantasia) ? 'has-error' : '' }}">
+            <label class="control-label">Fantasia:</label>
+            <input class="form-control" type="text" name="fantasia" id="fantasia" value="{{company.fantasia}}">
+            <p class="help-block">{{ (errors.fantasia) ? errors.fantasia : '' }}</p>
+        </div>
+        {% if new %}
+            <div class="form-group {{ (errors.saldoInicial) ? 'has-error' : '' }}">
+                <label class="control-label">Saldo inicial:</label>
+                <input required class="form-control" type="text" name="saldoInicial" id="saldoInicial" value="{{company.saldoInicial}}">
+                <p class="help-block">{{ (errors.saldoInicial) ? errors.saldoInicial : '' }}</p>
+            </div>
+        {% endif %}
+    </fieldset>
+    <fieldset>
+        <legend>Dados adicionais</legend>
+        <div class="form-group {{ (errors.telefone) ? 'has-error' : '' }}">
+            <label class="control-label">Telefone:</label>
+            <input class="form-control" type="text" name="telefone" id="telefone" value="{{company.telefone}}">
+            <p class="help-block">{{ (errors.telefone) ? errors.telefone : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.email) ? 'has-error' : '' }}">
+            <label class="control-label">E-mail:</label>
+            <input class="form-control" type="text" name="email" id="email" value="{{company.email}}">
+            <p class="help-block">{{ (errors.email) ? errors.email : '' }}</p>
+        </div>
+    </fieldset>
+</div>
+<div  class="col-sm-6">
+    <fieldset>
+        <legend>Endereço:</legend>
+        <div class="form-group {{ (errors.endereco) ? 'has-error' : '' }}">
+            <label class="control-label">Logradouro:</label>
+            <input class="form-control" type="text" name="endereco" id="endereco" value="{{company.endereco}}">
+            <p class="help-block">{{ (errors.endereco) ? errors.endereco : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.bairro) ? 'has-error' : '' }}">
+            <label class="control-label">Bairro:</label>
+            <input class="form-control" type="text" name="bairro" id="bairro" value="{{company.bairro}}">
+            <p class="help-block">{{ (errors.bairro) ? errors.bairro : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.cidade) ? 'has-error' : '' }}">
+            <label class="control-label">Cidade:</label>
+            <input class="form-control" type="text" name="cidade" id="cidade" value="{{company.cidade}}">
+            <p class="help-block">{{ (errors.cidade) ? errors.cidade : '' }}</p>
+        </div>
+        <div class="form-group {{ (errors.estado) ? 'has-error' : '' }}">
+            <label class="control-label">UF:</label>
+            <select class="form-control" name="estado" id="estado">
+                <option value="">...</option>
+                {% for state in states %}
+                    {% set selected = (state.id == company.estado.id) ? 'selected' : '' %}
+                    <option value="{{state.id}}" {{selected}}>{{state.descricao}}</option>
+                {% endfor %}
+            </select>
+            <p class="help-block">{{ (errors.estado) ? errors.estado : '' }}</p>
+        </div>
+    </fieldset>
+</div>

@@ -1,0 +1,86 @@
+{% extends 'base/admin.twig' %}
+
+{% block content %}
+
+    <h2 class="page-header">Venda nº {{ sale.id }}</h2>
+
+    <div>
+        <a class="btn btn-info" href="{{ path_for('list-sales-employee', {id: user.id}) }}">Voltar</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-7">
+            <table id="produtos" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Produto</th>
+                        <th>Valor</th>
+                        <th>Quantidade</th>
+                        <th>Medida</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set units = constant('\\Model\\Produto::UNIDADE_MEDIDA') %}
+                    {% for product in saleProducts %}
+                        <tr>
+                            <td>{{ relationship(product, 'produto').id }}</td>
+                            <td>{{ product.produto.nome }}</td>
+                            <td>{{ product.produto.valor }}</td>
+                            <td>{{ product.quantidade }}</td>
+                            <td>{{ units[product.produto.unidadeMedida] }}</td>
+                            <td>R$ {{ (product.preco * product.quantidade)|number_format(2,',', '.') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    {% if sale.desconto %}
+                        <tr>
+                            <th colspan="4"></th>
+                            <th>Desconto:</th>
+                            <th>R$ -{{ sale.desconto|number_format(2, ',', '.') }}</th>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th colspan="4"></th>
+                        <th>Total:</th>
+                        <th>R$ {{ sale.totalLiquido|number_format(2, ',', '.') }}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="pagamento" class="col-xs-5">
+            <h4>Pagamento</h4>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-xs-3">Método:</label> 
+                    <div class="col-xs-9">
+                        <p class="form-control-static">{{relationship(sale, 'pagamento').nome}}</p>
+                    </div>
+                </div>
+                {% if sale.pagamento.parcelado or (sale.pagamento.aceitaTroco and sale.troco) %}
+                    <div class="form-group">
+                        <label class="control-label col-xs-3">Dados:</label> 
+                        <div class="col-xs-9">
+                            {% if sale.pagamento.parcelado %}
+                                <div>{{ sale.countOwn('parcela') }}x</div>
+                                <div>de R$ {{ ( sale.totalLiquido / sale.countOwn('parcela') )|number_format(2, ',', '.') }}</div>
+                            {% elseif sale.pagamento.aceitaTroco and sale.troco %}
+                                <div>Recebido: R$ {{ sale.recebido|number_format(2,',','.') }}</div>
+                                <div>Troco: R$ {{ sale.troco|number_format(2,',','.') }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="form-group">
+                    <label class="control-label col-xs-3">Total:</label>
+                    <div class="col-xs-9">
+                        <p class="form-control-static">R$ {{ sale.totalLiquido|number_format(2, ',', '.') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

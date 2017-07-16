@@ -1,0 +1,19 @@
+{% extends "base/base.twig" %}
+
+{% block content %}
+    
+    <h4>Seja bem-vindo!</h4>
+    <p>Por favor, selecione uma empresa</p>
+
+    <form name="selectCompany" method="POST" action="{{ path_for('select-company') }}">
+        <input type="hidden" name="_METHOD" value="OPTIONS">
+        <select name="company">
+            <option>Selecione...</option>
+            {% for company in companies %}
+                <option value="{{company.id}}"> {{company.razaoSocial}} </option>
+            {% endfor %}
+        </select>
+        <button>OK!</button>
+    </form>
+
+{% endblock %}

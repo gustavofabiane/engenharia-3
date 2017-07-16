@@ -1,0 +1,28 @@
+{% extends "base/base.twig" %}
+
+{% block header %}
+    <header class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left open sidebar-open">
+
+        <h4>{{ title }}</h4>
+
+        <div>
+            <h3>{{ selCompany.fantasia }}</h3>
+            <p>
+                Logado, {{ user.nome }} {{ user.sobrenome }}
+            </p>
+        </div>
+
+        <a href="{{ path_for('logout') }}">Sair</a>
+
+        {% include 'base/menu.twig' %}
+
+    </header>
+{% endblock %}
+
+{% block mainContainer %}col-md-9 col-md-offset-3{% endblock %}
+
+
+
+
+
+

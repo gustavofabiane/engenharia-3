@@ -1,0 +1,24 @@
+{% extends "base/base.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header">Dados da sua Empresa</h2>
+
+    <p>Não perca tempo, cadastre agora mesmo sua empresa e começa a utilizar o sistema.</p>
+
+    <form name="company" method="POST" action{{path_for('register-company')}}>
+        <input type="hidden" name="validacao" value="company">
+        {% include 'company/company-form.twig' with {'new': 'true'} %}
+
+        <div class="col-xs-6">
+            <div class="text-right">
+                <a class="btn btn-default" href="{{ path_for('register-cancel') }}">Cancelar</a>
+                <a class="btn btn-info" href="{{path_for('register-account')}}"> <i class="glyphicon glyphicon-arrow-left"></i> Voltar</a>
+                <button class="btn btn-primary">Avançar <i class="glyphicon glyphicon-arrow-right"></i></button>
+            </div>
+        </div>
+                
+    </form>
+
+
+{% endblock %}

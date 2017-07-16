@@ -1,0 +1,16 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header">Novo Funcionário</h2>
+
+    <form name="newEmployee" method="POST" action="{{ path_for('new-employee') }}">
+        <input type="hidden" readonly name="validacao" value="newUser">
+        {% include 'employee/employee-form.twig' %}
+        <div class="form-group text-right">
+            <a class="btn btn-default" href="{{ path_for('list-employees') }}">Cancelar</a>
+            <button class="btn btn-primary">Salvar</button>
+        </div>
+    </form>
+
+{% endblock %}

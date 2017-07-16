@@ -1,0 +1,27 @@
+{% extends "base/admin.twig" %}
+{% block content %}
+
+    <h2 class="page-header">Permissões para {{employee.nome ~' '~ employee.sobrenome }}</h2>
+
+    <form name="employeePermissions" method="POST" action="{{ path_for('employee-permissions', {id: employee.id}) }}">
+        <input type="hidden" name="_METHOD" value="PATCH">
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-4">
+                <ul class="permissions list-unstyled">
+                    {% for permission in permissions %}
+                        {% set checked = (employee.hasPermission(permission)) ? 'checked' : '' %}
+                        <li>
+                            <label class="checkbox">
+                                <input type="checkbox" name="permissoes[]" value="{{permission.id}}" {{checked}}>{{ permission.descricao }}
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div>
+                    <a class="btn btn-default" href="{{ path_for('list-employees') }}">Voltar</a>
+                    <button class="btn btn-primary">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    {#    <p>{{company}}</p>#}
+    <p>{{message}}</p>
+    <p>{{errors|json_encode()}}</p>
+
+    <h2 class="page-header">Alterar dados da Empresa</h2>
+
+    <form name="updateCompany" action="{{ path_for('update-company', {id: company.id}) }}" method="POST">
+        <input type="hidden" name="_METHOD" value="PUT">
+        <input type="hidden" name="validacao" value="company">
+        <div class="row">
+            {% include 'company/company-form.twig' %}
+        </div>
+        <div class="form-group text-right">
+            <a class="btn btn-default" href="{{ path_for('view-company', {id: company.id}) }}">Cancelar</a>
+            <button class="btn btn-primary">Salvar</button>
+        </div>
+    </form>
+
+{% endblock %}

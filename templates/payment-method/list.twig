@@ -1,0 +1,34 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header">Métodos de Pagamentos</h2>
+
+    <form name="payment-methods" action="{{ path_for('update-company-pay-methods') }}" method="POST">
+        <div class="text-right form-group">
+            <button class="btn btn-primary">Atualizar Métodos</button>
+        </div>
+        <input type="hidden" name="_METHOD" value="PUT" readonly>
+        <div id="metodos">
+            {% for method in methods %}
+                {% set panel = (companyMethods[method.id]) ? 'info' : 'default' %}
+                {% set checked = (companyMethods[method.id]) ? 'checked' : '' %}
+
+                <div class="panel panel-inline metodo-pagamento panel-{{ panel }}">
+                    <div class="panel-heading">
+                        <h4>{{ method.nome }}</h4>
+                    </div>
+                    <div class="panel-body">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="metodo[]" value="{{ method.id }}" {{ checked }}>
+                            <p>{{ method.descricao }}</p>
+                            {% if method.parcelado %}
+                                <p>Valor minimo da parcela: R$ {{ method.minValorParcela|number_format(2, ',', '.') }}</p>
+                            {% endif %}
+                        </label>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </form>
+{% endblock %}

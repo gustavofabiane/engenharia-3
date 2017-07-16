@@ -1,0 +1,42 @@
+{% extends 'base/admin.twig' %}
+
+{% block content %}
+
+    <h2 class="page-header">Despesas</h2>
+
+    <a class="btn btn-primary" href="{{ path_for('new-bill') }}">Nova</a>
+    <a class="btn btn-info" href="{{ path_for('approving-bills') }}">Aprovações</a>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Descrição</th>
+                <th>Tipo</th>
+                <th>Valor</th>
+                <th>Status</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bill in bills %}
+                <tr>
+                    <td>{{ bill.id }}</td>
+                    <td>{{ bill.descricao }}</td>
+                    <td>{{ relationship(bill, 'tipoDespesa').name }}</td>
+                    <td>{{ bill.valor }}</td>
+                    <td>{{ relationship(bill, 'statusDespesa').name }}</td>
+                    <td>
+                        <a class="btn btn-xs btn-info" href="{{ path_for('update-bill', {id: bill.id}) }}">Editar</a>
+                        <a class="btn btn-xs btn-danger" href="{{ path_for('cancel-bill', {id: bill.id}) }}">Cancelar</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Nenhuma despesa cadastrada</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

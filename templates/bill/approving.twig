@@ -1,0 +1,81 @@
+{% extends 'base/admin.twig' %}
+
+{% block content %}
+
+    <h2 class="page-header">Despesas - Aprovações</h2>
+
+    <a class="pull-right" href="{{ path_for('list-bills') }}">Voltar para Despesas</a>
+
+    <form id="form" name="approvingBills" method="POST" action="{{ path_for('approving-bills-choice') }}">
+        <input type="hidden" name="_METHOD" value="PATCH" readonly>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Descrição</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                    <th><input type="checkbox" id="checkAll" title="Checar todos"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bill in bills %}
+                    <tr>
+                        <td>{{ bill.id }}</td>
+                        <td>{{ bill.descricao }}</td>
+                        <td>{{ relationship(bill, 'tipoDespesa').name }}</td>
+                        <td>{{ bill.valor|number_format(2,',','.') }}</td>
+                        <td>
+                            <input type="checkbox" class="check-bill" name="despesas[]" value="{{ bill.id }}">
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" align="center">Nenhuma despesa para ser aprovada</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if bills is not empty %}
+            <div class="form-group">
+                <label class="radio-inline">
+                    <input type="radio" name="choice" value="approve">
+                    Aprovar
+                </label>
+
+                <label class="radio-inline">
+                    <input type="radio" name="choice" value="disapprove">
+                    Enviar para revisão
+                </label>
+
+                <label class="radio-inline">
+                    <input type="radio" name="choice" value="cancelAll">
+                    Cancelar
+                </label>
+                <button class="pull-right btn btn-sm btn-primary">Enviar análise</button>
+            </div>
+        {% endif %}
+    </form>
+    <script type="text/javascript">
+        window.onload = function () {
+            var radios = document.getElementsByName('choice');
+            var action = document.getElementById('form').action;
+            for (var i = 0; i < radios.length; i++) {
+                radios[i].onclick = function () {
+                    document.getElementById('form').action = action + this.value + '/';
+                };
+            }
+        };
+
+        $(document).ready(function() {
+            $('#checkAll').change(function() {
+                $('.check-bill').attr("checked", false);
+                if($(this).is(':checked')) {
+                    $('.check-bill').attr('checked', true);
+                } else {
+                    $('.check-bill').attr('checked', false);
+                }
+            });
+        });
+    </script>
+{% endblock %}

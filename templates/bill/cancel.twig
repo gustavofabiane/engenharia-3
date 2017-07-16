@@ -1,0 +1,24 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>Cancelar despesa nº {{bill.id}} ({{ bill.descricao }})</h4>
+            </div>
+            <div class="panel-body">
+                <p>
+                    Têm certeza que deseja cancelar a despesa selecionada?
+                </p>
+            </div>
+            <div class="panel-footer text-right">
+                <form name="cancelBill" action="{{ path_for('cancel-bill', {id: bill.id}) }}" method="POST">
+                    <input type="hidden" readonly name="_METHOD" value="DELETE">
+                    <a class="btn btn-info" href="{{ path_for('list-bills') }}">Não</a>
+                    <button class="btn btn-danger">Sim</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

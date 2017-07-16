@@ -1,0 +1,42 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header">Funcionários</h2>
+    
+    <a class="btn btn-primary" href="{{ path_for('new-employee') }}">Novo</a>
+    
+    <table class="table table-stripped table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
+                <th>Cargo</th>
+                <th>&nbsp</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+                <tr id="emp_{{employee.id}}">
+                    <td>{{employee.id}}</td>
+                    <td>{{employee.nome ~ ' ' ~ employee.sobrenome}}</td>
+                    <td>{{employee.email}}</td>
+                    <td>{{employee.telefone}}</td>
+                    <td>{{relationship(employee, 'cargo').nome}}</td>
+                    <td>
+                        <a class="btn btn-xs btn-default" href="{{ path_for('employee-permissions', {id: employee.id}) }}">Permissões</a>
+                        <a class="btn btn-xs btn-info" href="{{ path_for('update-employee', {id: employee.id}) }}">Editar</a>
+                        <a class="btn btn-xs btn-danger" href="{{ path_for('dismiss-employee', {id: employee.id}) }}">Demitir</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">Nenhum funcionário cadastrado</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

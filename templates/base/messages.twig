@@ -1,0 +1,7 @@
+<script>
+    {% for type, msgs in messages %}
+        {% for message in msgs %}
+            $.notify('{{ message }}', '{{ type }}');
+        {% endfor %}
+    {% endfor %}
+</script>

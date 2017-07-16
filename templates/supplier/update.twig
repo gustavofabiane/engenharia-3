@@ -1,0 +1,11 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+    <h2 class="page-header">Alterar Fornecedor {{ supplier.razaoSocial }}</h2>
+    <form name="newSupplier" method="POST" action="{{ path_for('update-supplier', {id: supplier.id}) }}">
+        <input type="hidden" readonly name="validacao" value="supplier">
+        <input type="hidden" readonly name="_METHOD" value="PUT">
+        {% include 'supplier/supplier-form.twig' %}
+    </form>
+
+{% endblock %}

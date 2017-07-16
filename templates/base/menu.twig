@@ -1,0 +1,32 @@
+
+{% block management %}
+    <h5>Gerenciamento</h5>
+    <ul class="nav navbar-stacked">
+        <li><a href="{{ path_for('own-companies') }}">Empresas</a></a></li>
+        <li><a href="{{ path_for('list-employees') }}">Funcionários</a></a></li>
+        <li><a href="{{ path_for('list-bills') }}">Despesas</a></li>
+        <li><a href="{{ path_for('list-categories') }}">Categorias</a></a></li>
+        <li><a href="{{ path_for('list-suppliers') }}">Fornecedores</a></li>
+        <li><a href="{{ path_for('list-products') }}">Produtos</a></a></li>
+        <li><a href="{{ path_for('payment-methods') }}">Pagamento</a></li>
+    </ul>
+{% endblock %}
+
+{% block work %}
+    <h5>Atividade</h5>
+    <ul class="nav navbar-stacked">
+        <li><a href="{{ path_for('new-sale') }}">Venda</a></li>
+        <li><a href="{{ path_for('product-receipt') }}">Recebimento</a></li>
+    </ul>
+{% endblock %}
+
+{% block data %}
+    <h5>Relatório</h5>
+    <ul class="nav navbar-stacked">
+        <li><a href="{{ path_for('list-sales-employee', {id:user.id}) }}">Vendas</a></li>
+            {#<li><a href="">Produtos</a></li>
+            <li><a href="">Fornecedores</a></li>
+            <li><a href="">Vendedores</a></li>
+            <li><a href="">Minhas Vendas</a></li>#}
+    </ul>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base/base.twig" %}
+
+{% block content %}
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Seja bem vindo, {{ user.nome }}
+            </div>
+            <div class="panel-body">
+                <p>
+                    Você já pode começar a utilizar nossos recursos!
+                </p>
+
+                {% if company %}
+                    <p>
+                        Sua empresa, {{ company.razaoSocial }}, já esta cadastrada e você pode acessar sua dashboard de gerenciamento.
+                    </p>
+                {% endif %}
+            </div>
+            <div class="panel-footer">
+                <a href="{{path_for('login')}}">Ir para o Login</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

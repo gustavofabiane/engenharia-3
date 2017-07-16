@@ -1,0 +1,32 @@
+<div class="form-group">
+    <label class="control-label">Descrição:</label>
+    <input class="form-control" type="text" name="descricao" value="{{ bill.descricao }}">
+</div>
+<div class="form-group">
+    <label class="control-label">Tipo:</label>
+    <input class="form-control" type="text" name="tipoDespesa" value="{{ bill.tipoDespesa.name }}">
+</div>
+<div class="form-group">
+    <label class="control-label">Valor:</label>
+    <input class="form-control" type="text" name="valor" value="{{ bill.valor }}">
+</div>
+<div class="form-group">
+    <label class="control-label">Pagamento:</label>
+    <input class="form-control" type="text" name="dtPagamento" value="{{ bill.dtPagamento|date('d/m/Y') }}">
+</div>
+<div class="text-right form-group">
+    <a class="btn btn-default" href="{{ path_for('list-bills') }}">Cancelar</a>
+    <button class="btn btn-primary">Salvar</button>
+</div>
+
+<script>
+    $('[name=tipoDespesa]').autocomplete({
+        serviceUrl: 'http://engenharia.dev/despesas/tipos/',
+        type: 'post',
+        dataType: 'json',
+        deferRequestBy: 1000,
+        onSelect: function (result) {
+            $('#tipoDespesa').val(result);
+        }
+    });
+</script>

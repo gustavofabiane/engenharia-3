@@ -1,0 +1,42 @@
+{% extends 'base/admin.twig' %}
+
+{% block content %}
+
+    <h2 class="page-header">Vendas Efetuadas</h2>
+
+    <div>
+        <a class="btn btn-primary" href="{{ path_for('new-sale') }}">Nova</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Data</th>
+                <th>Produtos</th>
+                <th>Total</th>
+                <th>Total Liquido</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in sales %}
+                <tr>
+                    <td>{{ sale.id }}</td>
+                    <td>{{ sale.criado_em|date('d/m/Y') }}</td>
+                    <td>{{ sale.countOwn('venda_produto') }}</td>
+                    <td>{{ sale.total }}</td>
+                    <td>{{ sale.totalLiquido }}</td>
+                    <td>
+                        <a class="btn btn-xs btn-info" href="{{ path_for('view-sale', {id: sale.id}) }}">Ver</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Você ainda não realizou nenhuma venda</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

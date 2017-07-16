@@ -1,0 +1,39 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header">{{ company.fantasia }} <small>{{ company.razaoSocial }}</small> </h2>
+
+    <div class="text-right">
+        {% if not company.fechada %}
+            <a class="btn btn-info btn-sm" href="{{ path_for('update-company', {id: company.id}) }}">Alterar</a>
+            <a class="btn btn-danger btn-sm" href="{{ path_for('close-company', {id: company.id}) }}">Fechar</a>
+        {% else %}
+            <p class="text-danger">Empresa fechada</p>
+        {% endif %}
+    </div>
+
+    <div class="row" id="dados">
+
+        <div class="col-sm-6">
+            <h4>Dados</h4>
+            <p>CNPJ: {{ company.cnpj }}</p>
+            <p>Dono: {{ relationship(company, 'dono').nome ~ company.dono.sobrenome }}</p>
+            <p>Telefone:{{ company.telefone }}</p>
+            <p>E-mail: {{ company.email }}</p>
+        </div>
+
+        <address class="col-sm-6">
+
+            <h4>Endereço</h4>
+
+            <p>{{ company.endereco }}</p>
+            <p>{{ company.bairro }}</p>
+            <p>{{ company.cidade }}</p>
+            <p>{{ company.estado.descricao }}</p>
+
+        </address>
+
+    </div>
+
+{% endblock %}

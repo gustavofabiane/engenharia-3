@@ -1,0 +1,123 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header">Recebimento de Produtos</h2>
+    
+    <div id="add-recebido" class="form-inline form-group">
+        <select id="produto" class="form-control">
+            <option value="">Produto...</option>
+            {% for product in products %}
+                <option value="{{ product.id }}-{{ product.nome }}">{{ product.nome }}</option>
+            {% endfor %}
+        </select>
+        <select id="fornecedor" class="form-control">
+            <option value="">Fornecedor...</option>
+        </select>
+        <input type="number" id="quantidade" placeholder="Quantidade" class="form-control">
+        <input type="number" id="valor" placeholder="Valor Unitário" class="form-control">
+        <button id="addProduto" class="btn btn-info">Adicionar</button>
+        <button class="btn btn-primary pull-right" form="receiptProducts">Confirmar</button>
+    </div>
+    <form id="receiptProducts" name="receiptProducts" action="{{ path_for('product-receipt') }}" method="POST">
+        <input type="hidden" name="_METHOD" value="PATCH">
+        <table id="recebidos" class="table table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Produto</th>
+                    <th>Fornecedor</th>
+                    <th>Qtd</th>
+                    <th>Preço</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="hidden produto-recebido" id="base">
+                    <td>
+                        <i class="remover-produto glyphicon glyphicon-remove"></i>
+                    </td>
+                    <td class="nome-produto"></td>
+                    <td class="nome-fornecedor"></td>
+                    <td class="qtd"></td>
+                    <td class="val-un"></td>
+            <input type="hidden" name="produtos[]" class="id-produto"    value="" disabled>
+            <input type="hidden" name="produtos[]" class="id-fornecedor" value="" disabled>
+            <input type="hidden" name="produtos[]" class="quantidade"    value="" disabled>
+            <input type="hidden" name="produtos[]" class="valor"         value="" disabled>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+    <script>
+        var index = 0;
+
+        function adicionarProduto() {
+
+            var produto = $('#produto').val().split('-');
+            var fornecedor = $('#fornecedor').val().split('-');
+            var quantidade = $('#quantidade').val();
+            var valor = $('#valor').val();
+
+            var base = $('#base').clone();
+            base.attr('id', '').removeClass('hidden').children('input').attr('disabled', false);
+            base.children('.nome-produto').html(produto[1]);
+            base.children('.nome-fornecedor').html(fornecedor[1]);
+            base.children('.qtd').html(quantidade);
+            base.children('.val-un').html(valor);
+            base.children('.id-produto').val(produto[0]).attr('name', 'produtos[' + index + '][produto]');
+            base.children('.id-fornecedor').val(fornecedor[0]).attr('name', 'produtos[' + index + '][fornecedor]');
+            base.children('.quantidade').val(quantidade).attr('name', 'produtos[' + index + '][quantidade]');
+            base.children('.valor').val(valor).attr('name', 'produtos[' + index + '][valor]');
+            base.children('tr i.remover-produto').click(function () {
+                $(this).parents('tr.produto-recebido').remove();
+            });
+            index++;
+            $('#recebidos tbody').prepend(base);
+        }
+
+        $(document).ready(function () {
+
+            $('#produto').change(function () {
+
+                if (this.value === "") {
+                    return false;
+                }
+
+                info = this.value.split('-');
+                productId = info[0];
+
+                $.get('{{ path_for('product-receipt-suppliers') }}' + productId + '/', null, function (suppliers) {
+                    $('#fornecedor')
+                            .html('<option value="">Fornecedor...</option>')
+                            .append(suppliers);
+                });
+
+            });
+
+            $('#addProduto').click(function () {
+                if ($('#produto').val() === "") {
+                    alert("Favor selecionar um produto!");
+                    $('#produto').focus();
+                    return false;
+                }
+                if ($('#fornecedor').val() === "") {
+                    alert("Favor selecionar um fornecedor!");
+                    $('#fornecedor').focus();
+                    return false;
+                }
+                if (isNaN($('#quantidade').val())) {
+                    alert("Favor informar a quantidade recebida do produto!");
+                    $('#fornecedor').focus();
+                    return false;
+                }
+
+                adicionarProduto();
+
+                $('#add-recebido input, #add-recebido select').val('');
+                $('#fornecedor').html('<option value="">Selecione...</option>');
+                $('#produto').focus();
+            });
+
+        });
+    </script>
+{% endblock %}

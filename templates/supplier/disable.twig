@@ -1,0 +1,24 @@
+{% extends 'base/admin.twig' %}
+
+{% block content %}
+
+    <div class="col-sm-4 col-sm-offset-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Desabilitar {{ supplier.razaoSocial }}
+            </div>
+            <div class="panel-body">
+                <p>Tem certeza que você deseja desabilitar o fornecedor {{ supplier.razaoSOcial }}?</p>
+                <p>Os produtos fornecidos apenas por este fornecedor ficarão indisponíveis para entrega em estoque.</p>
+            </div>
+            <div class="panel-footer text-right">
+                <form name="disableCategory" method="POST" action="{{ path_for('disable-supplier', {id: supplier.id}) }}">
+                    <input type="hidden" name="_METHOD" value="DELETE">
+                    <a class="btn btn-info" href="{{ path_for('list-suppliers') }}">Não</a>
+                    <button class="btn btn-danger">Sim</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

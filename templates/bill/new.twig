@@ -1,0 +1,16 @@
+{% extends 'base/admin.twig' %}
+
+{% block content %}
+
+    <h2 class="page-header">Nova Despesa</h2>
+
+    <form name="newBill" method="POST" action="{{ path_for('new-bill') }}">
+        <input type="hidden" name="validacao" value="bill">
+        <div class="row">
+            <div class="col-xs-6 col-xs-offset-3">
+                {% include 'bill/form-bill.twig' %}
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

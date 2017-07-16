@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        {% block head %}
+            <title>{{ title }}</title>
+
+            <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+            <link href="/vendor/sidebar/sidebar.css" rel="stylesheet">
+            <link href="/css/styles.css" rel="stylesheet">
+
+            <script src="/vendor/jquery/jquery.js"></script>
+            <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+            <script src="/vendor/sidebar/sidebar.js"></script>
+
+            <script src="/vendor/notify/notify.js"></script>
+            <script src="/vendor/devbridge/autocomplete.js"></script>
+
+        {% endblock %}
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                {% block header %}
+                    <div class="jumbotron">
+                        <div class="container text-center">
+                            <h2>{{title}}</h2>
+                        </div>
+                    </div>
+                {% endblock %}
+                <main class="{% block mainContainer %}container{% endblock %}">
+                    <div class="container-fluid">
+                        {% block messages %}
+                            {% include 'base/messages.twig' %}
+                        {% endblock %}
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </main>
+            </div>
+        </div>
+    </body>
+</html>

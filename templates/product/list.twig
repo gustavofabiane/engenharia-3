@@ -1,0 +1,44 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header">Produtos</h2>
+    
+    <a class="btn btn-primary" href="{{ path_for('new-product') }}">Novo</a>
+    <a class="btn btn-info" href="{{ path_for('product-receipt') }}">Recebimento</a>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Medida</th>
+                <th>Valor</th>
+                <th>Vendas</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.nome }}</td>
+                    <td>{{ relationship(product, 'categoria').nome }}</td>
+                    <td>{{ product.unidadeMedida }}</td>
+                    <td>{{ product.valor }}</td>
+                    <td>{{ product.countOwn('venda_produto') }}</td>
+                    <td>
+                        <a class="btn btn-xs btn-info" href="{{ path_for('update-product', {id: product.id}) }}">Alterar</a>
+                        <a class="btn btn-xs btn-success" href="{{ path_for('view-product', {id: product.id}) }}">Ver</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Nenhum produto cadastrado</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

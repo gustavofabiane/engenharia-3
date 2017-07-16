@@ -1,0 +1,38 @@
+{% extends 'base/admin.twig' %}
+
+{% block content %}
+
+    <h2 class="page-header">Categorias</h2>
+    
+    <a class="btn btn-primary" href="{{ path_for('new-categories') }}">Nova</a>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Margem de Lucro</th>
+                <th>Total Produtos</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.id }}</td>
+                    <td>{{ category.nome }}</td>
+                    <td>{{ category.margemLucro }}</td>
+                    <td>{{ category.countOwn('produto') }}</td>
+                    <td>
+                        <a class="btn btn-xs btn-info" href="{{ path_for('update-category', {id: category.id}) }}">Editar</a>
+                        <a class="btn btn-xs btn-danger" href="{{ path_for('disable-category', {id: category.id}) }}">Desativar</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">Nenhuma categoria cadastrada</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

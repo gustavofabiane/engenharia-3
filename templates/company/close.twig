@@ -1,0 +1,26 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <form method="POST" name="closeCompany" action="{{ path_for('close-company', { id: company.id }) }}">
+        <input type="hidden" name="_METHOD" value="DELETE">
+        <div class="col-sm-4 col-sm-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Fechar {{ company.fantasia }}
+                </div>
+                <div class="panel-body">
+                    <p>
+                        Tem certeza que deseja fechar a empresa {{ company.razaoSocial }}? Todos os dados serão mantidos e 
+                        a mesma poderá ser re-aberta através de uma solicitação à administração.
+                    </p>
+                </div>
+                <div class="panel-footer text-right">
+                    <a class="btn btn-primary" href="{{ path_for('view-company', { id: company.id }) }}">Não</a>
+                    <button class="btn btn-danger">Sim</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <form method="POST" name="closeCompany" action="{{ path_for('dismiss-employee', { id: employee.id }) }}">
+        <input type="hidden" name="_METHOD" value="DELETE">
+        <div class="col-sm-4 col-sm-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Demitir {{ employee.nome }} {{ employee.sobrenome }}
+                </div>
+                <div class="panel-body">
+                    <p>
+                        Têm certeza que deseja demitir este funcionário?
+                    </p>
+                </div>
+                <div class="panel-footer text-right">
+                    <a class="btn btn-primary" href="{{ path_for('list-employees') }}">Não</a>
+                    <button class="btn btn-danger">Sim</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

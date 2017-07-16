@@ -1,0 +1,30 @@
+{% extends 'base/admin.twig' %}
+
+{% block content %}
+
+    <h2 class="page-header">Alterar categoria <small>{{ category.nome }}</small></h2>
+
+    <form name="updateCategory" method="POST" action="{{ path_for('update-category', {id: category.id}) }}">
+        <input type="hidden" name="_METHOD" value="PUT">
+        <input type="hidden" name="validacao" value="updateCategory">
+        <div class="row">
+            <div class="col-xs-6 col-xs-offset-3">
+                <div class="form-group {{ (errors.nome) ? 'has-error' : '' }}">
+                    <label class="control-label">Nome:</label>
+                    <input class="form-control" type="text" name="nome" value="{{category.nome}}">
+                    <p class="help-block">{{ (errors.nome) ? errors.nome : '' }}</p>
+                </div>
+                <div class="form-group {{ (errors.margemLucro) ? 'has-error' : '' }}">
+                    <label class="control-label">Margem de Lucro:</label>
+                    <input class="form-control" type="number" name="margemLucro" value="{{category.margemLucro}}">
+                    <p class="help-block">{{ (errors.margemLucro) ? errors.margemLucro : '' }}</p>
+                </div>
+                <div class="text-right">
+                    <a class="btn btn-default" href="{{ path_for('list-categories') }}">Cancelar</a>
+                    <button class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

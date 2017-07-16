@@ -1,0 +1,93 @@
+{% extends "base/admin.twig" %}
+
+{% block content %}
+
+    <h2 class="page-header"> Nova Venda - Checkout</h2>
+    <p class="block-help">Dados da venda computados com sucesso, favor confirmar a efetuação!</p>
+
+    <div class="row">
+        <div class="col-xs-7">
+            <table id="produtos" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Produto</th>
+                        <th>Valor</th>
+                        <th>Quantidade</th>
+                        <th>Medida</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set units = constant('\\Model\\Produto::UNIDADE_MEDIDA') %}
+                    {% for product in saleProducts %}
+                        <tr>
+                            <td>{{ product.produto.id }}</td>
+                            <td>{{ product.produto.nome }}</td>
+                            <td>{{ product.produto.valor }}</td>
+                            <td>{{ product.quantidade }}</td>
+                            <td>{{ units[product.produto.unidadeMedida] }}</td>
+                            <td>R$ {{ (product.preco * product.quantidade)|number_format(2,',', '.') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    {% if sale.desconto %}
+                        <tr>
+                            <th colspan="4"></th>
+                            <th>Desconto:</th>
+                            <th>R$ -{{ sale.desconto|number_format(2, ',', '.') }}</th>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th colspan="4"></th>
+                        <th>Total:</th>
+                        <th>R$ {{ sale.totalLiquido|number_format(2, ',', '.') }}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="pagamento" class="col-xs-5">
+            <h4>Pagamento</h4>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-xs-3">Método:</label> 
+                    <div class="col-xs-9">
+                        <p class="form-control-static">{{sale.pagamento.nome}}</p>
+                    </div>
+                </div>
+                {% if sale.pagamento.parcelado or (sale.pagamento.aceitaTroco and sale.troco) %}
+                    <div class="form-group">
+                        <label class="control-label col-xs-3">Dados:</label> 
+                        <div class="col-xs-9">
+                            {% if sale.pagamento.parcelado %}
+                                <div>{{ sale.ownParcelaList|length }}x</div>
+                                <div>de R$ {{ sale.ownParcelaList[0].valor|number_format(2, ',', '.') }}</div>
+                            {% elseif sale.pagamento.aceitaTroco and sale.troco %}
+                                <div>Recebido: R$ {{ sale.recebido|number_format(2,',','.') }}</div>
+                                <div>Troco: R$ {{ sale.troco|number_format(2,',','.') }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="form-group">
+                    <label class="control-label col-xs-3">Total:</label>
+                    <div class="col-xs-9">
+                        <p class="form-control-static">R$ {{ sale.totalLiquido|number_format(2, ',', '.') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group-lg" id="form-check-sale">
+                <form name="cancel-sale" action="{{ path_for('cancel-sale') }}" method="POST">
+                    <input type="hidden" name="_METHOD" value="DELETE">
+                    <button class="btn btn-danger">Cancelar</button>
+                </form>
+                <form name="store-sale" action="{{ path_for('store-sale') }}" method="POST">
+                    <input type="hidden" name="_METHOD" value="PUT">
+                    <button class="btn btn-success">Confirmar Venda!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
